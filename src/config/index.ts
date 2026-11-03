@@ -1,4 +1,3 @@
-import React from 'react'
 import rawConfig from "./config.json";
 import type { Configuration } from "./configuration";
 

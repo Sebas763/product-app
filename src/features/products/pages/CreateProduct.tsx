@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { createProduct } from "../services/ProductService";
 import type { NewProduct } from "../models/request/Product";
 import { useForm } from "react-hook-form";
+import { Loader2 } from "lucide-react";
  
 // Datos que maneja el formulario
 type ProductFormValues = {
@@ -54,19 +55,19 @@ export default function CreateProduct() {
  
   return (
     <div className="mx-auto max-w-xl">
-      <Link to="/products" className="mb-6 inline-flex rounded-md text-sm font-medium text-blue-600 hover:text-blue-800 focus-visible:outline-2 focus-visible:outline-blue-600">← Volver a productos</Link>
-      <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
-        <h1 className="text-2xl font-bold tracking-tight text-slate-900">
+      <Link to="/products" className="mb-6 inline-flex rounded-md text-sm font-medium text-emerald-300 hover:text-emerald-200 focus-visible:outline-2 focus-visible:outline-emerald-400">← Volver a productos</Link>
+      <div className="animate-card rounded-2xl border border-zinc-800 bg-zinc-900 p-6 shadow-sm sm:p-8">
+        <h1 className="text-2xl font-bold tracking-tight text-zinc-50">
           Agregar producto
         </h1>
-        <p className="mb-8 mt-2 text-sm leading-6 text-slate-500">Completa la información para agregar un producto al catálogo.</p>
+        <p className="mb-8 mt-2 text-sm leading-6 text-zinc-400">Completa la información para agregar un producto al catálogo.</p>
  
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
           {/* Nombre del producto */}
           <div>
             <label
               htmlFor="name"
-              className="mb-2 block text-sm font-medium text-gray-700"
+              className="mb-2 block text-sm font-medium text-zinc-300"
             >
               Nombre del producto
             </label>
@@ -83,15 +84,16 @@ export default function CreateProduct() {
               })}
               aria-invalid={Boolean(errors.name)}
               aria-describedby={errors.name ? "name-error" : undefined}
-              className="w-full rounded-xl border border-slate-300 bg-slate-50 text-slate-900 placeholder:text-slate-400
+              className="w-full rounded-xl border border-zinc-700 bg-zinc-950/60 text-zinc-50 placeholder:text-zinc-500
                          px-4 py-2 outline-none
-                         focus:border-blue-500 focus:ring-2
-                         focus:ring-blue-200"
+                         transition-[border-color,box-shadow] duration-150
+                         focus:border-emerald-500 focus:ring-4
+                         focus:ring-emerald-500/30"
             />
  
             {/* Mensaje de validación */}
             {errors.name && (
-              <p id="name-error" role="alert" className="mt-2 text-sm text-red-600">{errors.name.message}</p>
+              <p id="name-error" role="alert" className="animate-fade mt-2 text-sm text-red-400">{errors.name.message}</p>
             )}
           </div>
  
@@ -99,19 +101,19 @@ export default function CreateProduct() {
           {serverError && (
             <p
               role="alert"
-              className="rounded-lg bg-red-50 p-3 text-sm text-red-600"
+              className="animate-fade rounded-lg bg-red-500/10 p-3 text-sm text-red-400"
             >
               {serverError}
             </p>
           )}
  
           {/* Botones */}
-          <div className="flex flex-col-reverse gap-3 border-t border-slate-100 pt-5 sm:flex-row sm:justify-end">
+          <div className="flex flex-col-reverse gap-3 border-t border-zinc-800 pt-5 sm:flex-row sm:justify-end">
             <Link
               to="/products"
-              className="rounded-xl border border-slate-300 text-center text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-blue-600
-                         px-5 py-2 text-gray-700
-                         hover:bg-gray-100"
+              className="rounded-xl border border-zinc-700 text-center text-sm font-medium pressable focus-visible:outline-2 focus-visible:outline-emerald-400
+                         px-5 py-2 text-zinc-300
+                         hover:bg-zinc-800"
             >
               Cancelar
             </Link>
@@ -119,13 +121,18 @@ export default function CreateProduct() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="rounded-xl bg-blue-600 px-5 py-2.5 text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600
+              className="rounded-xl bg-emerald-600 px-5 py-2.5 text-sm pressable focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-400
                          font-medium text-white
-                         hover:bg-blue-700
+                         hover:bg-emerald-700
                          disabled:cursor-not-allowed
                          disabled:opacity-50"
             >
-              {isSubmitting ? "Guardando..." : "Guardar producto"}
+              <span className="inline-flex items-center justify-center gap-2">
+                {isSubmitting && (
+                  <Loader2 size={16} className="animate-spin" aria-hidden="true" />
+                )}
+                {isSubmitting ? "Guardando..." : "Guardar producto"}
+              </span>
             </button>
           </div>
         </form>
