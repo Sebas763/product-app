@@ -1,5 +1,5 @@
 {
-    "api": {
-    "url": "http://localhost:5288"
-    }
+  "api": {
+    "url": "https://storebackend-sebas-a6hcfpbuduhdbhck.canadacentral-01.azurewebsites.net"
+  }
 }
