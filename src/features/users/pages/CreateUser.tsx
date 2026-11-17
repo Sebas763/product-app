@@ -5,28 +5,36 @@ import { Link, useNavigate } from "react-router-dom";
 import { createUser } from "../services/UserService";
 import type { NewUser } from "../models/request/User";
 import { useForm } from "react-hook-form";
-import { Loader2 } from "lucide-react";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
  
 // Datos que maneja el formulario
 type UserFormValues = {
   name: string;
+  username: string;
   email: string;
+  password: string;
+  confirmPassword: string;
 };
  
 export default function CreateUser() {
   const navigate = useNavigate();
  
   const [serverError, setServerError] = useState<string | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
  
   // Configuración de React Hook Form
   const {
     register,
     handleSubmit,
+    getValues,
     formState: { errors, isSubmitting },
   } = useForm<UserFormValues>({
     defaultValues: {
       name: "",
+      username: "",
       email: "",
+      password: "",
+      confirmPassword: "",
     },
   });
  
@@ -38,7 +46,9 @@ export default function CreateUser() {
     const request: NewUser = {
       userResourceId: crypto.randomUUID(),
       name: data.name.trim(),
+      username: data.username.trim(),
       email: data.email.trim(),
+      password: data.password,
     };
  
     try {
@@ -104,6 +114,46 @@ export default function CreateUser() {
             )}
           </div>
  
+          {/* Nombre de usuario */}
+          <div>
+            <label
+              htmlFor="username"
+              className="mb-2 block text-sm font-medium text-zinc-300"
+            >
+              Nombre de usuario
+            </label>
+ 
+            <input
+              id="username"
+              type="text"
+              placeholder="Ejemplo: mrojas"
+              autoComplete="username"
+              {...register("username", {
+                required: "El nombre de usuario es obligatorio",
+                pattern: {
+                  value: /^\S+$/,
+                  message: "El nombre de usuario no puede tener espacios",
+                },
+                maxLength: {
+                  value: 50,
+                  message: "El nombre de usuario no puede pasar de 50 caracteres",
+                },
+              })}
+              aria-invalid={Boolean(errors.username)}
+              aria-describedby={errors.username ? "username-error" : undefined}
+              className="w-full rounded-xl border border-zinc-700 bg-zinc-950/60 text-zinc-50 placeholder:text-zinc-500
+                         px-4 py-2 outline-none
+                         transition-[border-color,box-shadow] duration-150
+                         focus:border-emerald-500 focus:ring-4
+                         focus:ring-emerald-500/30"
+            />
+ 
+            {/* Mensaje de validación */}
+            {errors.username && (
+              <p id="username-error" role="alert" className="animate-fade mt-2 text-sm text-red-400">{errors.username.message}</p>
+            )}
+          </div>
+ 
           {/* Correo electrónico */}
           <div>
             <label
@@ -143,6 +193,94 @@ export default function CreateUser() {
             )}
           </div>
  
+          {/* Contraseña */}
+          <div>
+            <label htmlFor="password" className="mb-2 block text-sm font-medium text-zinc-300">
+              Contraseña
+            </label>
+
+            <div className="relative">
+              <input
+                id="password"
+                type={showPassword ? "text" : "password"}
+                autoComplete="new-password"
+                placeholder="Mínimo 8 caracteres"
+                {...register("password", {
+                  required: "La contraseña es obligatoria",
+                  minLength: {
+                    value: 8,
+                    message: "La contraseña debe tener al menos 8 caracteres",
+                  },
+                  maxLength: {
+                    value: 255,
+                    message: "La contraseña no puede pasar de 255 caracteres",
+                  },
+                })}
+                aria-invalid={Boolean(errors.password)}
+                aria-describedby={errors.password ? "password-error" : undefined}
+                className="w-full rounded-xl border border-zinc-700 bg-zinc-950/60 text-zinc-50 placeholder:text-zinc-500
+                         px-4 py-2 outline-none
+                         transition-[border-color,box-shadow] duration-150
+                         focus:border-emerald-500 focus:ring-4
+                         focus:ring-emerald-500/30 pr-12"
+              />
+
+              <button
+                type="button"
+                onClick={() => setShowPassword((value) => !value)}
+                aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+                className="pressable absolute inset-y-0 right-1 my-auto grid size-9 place-items-center rounded-lg text-zinc-500 hover:bg-zinc-800 hover:text-zinc-300 focus-visible:outline-2 focus-visible:outline-emerald-400"
+              >
+                {showPassword ? (
+                  <EyeOff size={18} aria-hidden="true" />
+                ) : (
+                  <Eye size={18} aria-hidden="true" />
+                )}
+              </button>
+            </div>
+
+            {errors.password && (
+              <p id="password-error" role="alert" className="animate-fade mt-2 text-sm text-red-400">
+                {errors.password.message}
+              </p>
+            )}
+          </div>
+
+          {/* Confirmar contraseña */}
+          <div>
+            <label htmlFor="confirmPassword" className="mb-2 block text-sm font-medium text-zinc-300">
+              Confirmar contraseña
+            </label>
+
+            <input
+              id="confirmPassword"
+              type={showPassword ? "text" : "password"}
+              autoComplete="new-password"
+              placeholder="Repite la contraseña"
+              {...register("confirmPassword", {
+                required: "Confirma la contraseña",
+                validate: (value) =>
+                  value === getValues("password") ||
+                  "Las contraseñas no coinciden",
+              })}
+              aria-invalid={Boolean(errors.confirmPassword)}
+              aria-describedby={
+                errors.confirmPassword ? "confirmPassword-error" : undefined
+              }
+              className="w-full rounded-xl border border-zinc-700 bg-zinc-950/60 text-zinc-50 placeholder:text-zinc-500
+                         px-4 py-2 outline-none
+                         transition-[border-color,box-shadow] duration-150
+                         focus:border-emerald-500 focus:ring-4
+                         focus:ring-emerald-500/30"
+            />
+
+            {errors.confirmPassword && (
+              <p id="confirmPassword-error" role="alert" className="animate-fade mt-2 text-sm text-red-400">
+                {errors.confirmPassword.message}
+              </p>
+            )}
+          </div>
+
           {/* Error devuelto por el servicio */}
           {serverError && (
             <p

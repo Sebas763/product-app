@@ -123,13 +123,19 @@ export default function UsersTable() {
                   </th>
                   <th
                     scope="col"
+                    className="hidden px-6 py-3 font-medium md:table-cell"
+                  >
+                    Usuario
+                  </th>
+                  <th
+                    scope="col"
                     className="hidden px-6 py-3 font-medium sm:table-cell"
                   >
                     Correo
                   </th>
                   <th
                     scope="col"
-                    className="hidden px-6 py-3 font-medium lg:table-cell"
+                    className="hidden px-6 py-3 font-medium xl:table-cell"
                   >
                     User Resource ID
                   </th>
@@ -152,7 +158,7 @@ export default function UsersTable() {
                     <td className="px-6 py-4">
                       <Link
                         to={`/users/${user.userResourceId}`}
-                        className="pressable flex w-fit items-center gap-3 rounded-lg font-medium text-zinc-50 group-hover:text-emerald-300 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald-400"
+                        className="pressable flex w-fit items-center gap-3 whitespace-nowrap rounded-lg font-medium text-zinc-50 group-hover:text-emerald-300 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald-400"
                       >
                         <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-emerald-500/10 text-emerald-400">
                           <UserRound size={18} aria-hidden="true" />
@@ -160,10 +166,13 @@ export default function UsersTable() {
                         {user.name}
                       </Link>
                     </td>
+                    <td className="hidden px-6 py-4 text-zinc-400 md:table-cell">
+                      @{user.username}
+                    </td>
                     <td className="hidden px-6 py-4 text-zinc-400 sm:table-cell">
                       {user.email}
                     </td>
-                    <td className="hidden px-6 py-4 font-mono text-xs text-zinc-500 lg:table-cell">
+                    <td className="hidden px-6 py-4 font-mono text-xs text-zinc-500 xl:table-cell">
                       {user.userResourceId}
                     </td>
                     <td className="px-6 py-4 text-right">

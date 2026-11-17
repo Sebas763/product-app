@@ -93,13 +93,6 @@ export default function UserDetail() {
         {!isLoading && !error && user && (
           <dl className="animate-fade space-y-5">
             <div>
-              <dt className="text-sm font-medium text-zinc-400">ID</dt>
-              <dd className="mt-1.5 rounded-lg border border-zinc-800 bg-zinc-950/60 p-3 font-mono text-sm text-zinc-300">
-                {user.userId}
-              </dd>
-            </div>
-
-            <div>
               <dt className="text-sm font-medium text-zinc-400">
                 User Resource ID
               </dt>
@@ -114,6 +107,15 @@ export default function UserDetail() {
               </dt>
               <dd className="mt-1.5 rounded-lg border border-zinc-800 bg-zinc-950/60 p-3 font-medium text-zinc-50">
                 {user.name}
+              </dd>
+            </div>
+
+            <div>
+              <dt className="text-sm font-medium text-zinc-400">
+                Nombre de usuario
+              </dt>
+              <dd className="mt-1.5 rounded-lg border border-zinc-800 bg-zinc-950/60 p-3 text-zinc-300">
+                @{user.username}
               </dd>
             </div>
 
